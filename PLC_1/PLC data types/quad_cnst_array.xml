@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V18" />
+  <SW.Types.PlcStruct ID="0">
+    <AttributeList>
+      <Interface><Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v5">
+  <Section Name="None">
+    <Member Name="element" Datatype="Array[0..3, 0..2] of Real">
+      <AttributeList>
+        <BooleanAttribute Name="ExternalAccessible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalVisible" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="ExternalWritable" SystemDefined="true">true</BooleanAttribute>
+        <BooleanAttribute Name="SetPoint" SystemDefined="true">false</BooleanAttribute>
+      </AttributeList>
+      <Subelement Path="0,0">
+        <Comment>
+          <MultiLanguageText Lang="en-US">a</MultiLanguageText>
+        </Comment>
+        <StartValue>0.00415</StartValue>
+      </Subelement>
+      <Subelement Path="0,1">
+        <Comment>
+          <MultiLanguageText Lang="en-US">b</MultiLanguageText>
+        </Comment>
+        <StartValue>0.452</StartValue>
+      </Subelement>
+      <Subelement Path="0,2">
+        <Comment>
+          <MultiLanguageText Lang="en-US">c</MultiLanguageText>
+        </Comment>
+        <StartValue>330.0</StartValue>
+      </Subelement>
+      <Subelement Path="1,0">
+        <Comment>
+          <MultiLanguageText Lang="en-US">a</MultiLanguageText>
+        </Comment>
+        <StartValue>-8.44E-07</StartValue>
+      </Subelement>
+      <Subelement Path="1,1">
+        <Comment>
+          <MultiLanguageText Lang="en-US">b</MultiLanguageText>
+        </Comment>
+        <StartValue>0.000463</StartValue>
+      </Subelement>
+      <Subelement Path="1,2">
+        <Comment>
+          <MultiLanguageText Lang="en-US">c</MultiLanguageText>
+        </Comment>
+        <StartValue>0.791</StartValue>
+      </Subelement>
+      <Subelement Path="2,0">
+        <Comment>
+          <MultiLanguageText Lang="en-US">a</MultiLanguageText>
+        </Comment>
+        <StartValue>-9.35E-05</StartValue>
+      </Subelement>
+      <Subelement Path="2,1">
+        <Comment>
+          <MultiLanguageText Lang="en-US">b</MultiLanguageText>
+        </Comment>
+        <StartValue>0.000775</StartValue>
+      </Subelement>
+      <Subelement Path="2,2">
+        <Comment>
+          <MultiLanguageText Lang="en-US">c</MultiLanguageText>
+        </Comment>
+        <StartValue>6.34</StartValue>
+      </Subelement>
+      <Subelement Path="3,0">
+        <Comment>
+          <MultiLanguageText Lang="en-US">a</MultiLanguageText>
+        </Comment>
+        <StartValue>-9.04E-05</StartValue>
+      </Subelement>
+      <Subelement Path="3,1">
+        <Comment>
+          <MultiLanguageText Lang="en-US">b</MultiLanguageText>
+        </Comment>
+        <StartValue>0.0284</StartValue>
+      </Subelement>
+      <Subelement Path="3,2">
+        <Comment>
+          <MultiLanguageText Lang="en-US">c</MultiLanguageText>
+        </Comment>
+        <StartValue>1.09</StartValue>
+      </Subelement>
+    </Member>
+  </Section>
+</Sections></Interface>
+      <IsFailsafeCompliant>false</IsFailsafeCompliant>
+      <Name>quad_cnst_array</Name>
+      <Namespace />
+    </AttributeList>
+    <ObjectList>
+      <MultilingualText ID="1" CompositionName="Comment">
+        <ObjectList>
+          <MultilingualTextItem ID="2" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+      <MultilingualText ID="3" CompositionName="Title">
+        <ObjectList>
+          <MultilingualTextItem ID="4" CompositionName="Items">
+            <AttributeList>
+              <Culture>en-US</Culture>
+              <Text />
+            </AttributeList>
+          </MultilingualTextItem>
+        </ObjectList>
+      </MultilingualText>
+    </ObjectList>
+  </SW.Types.PlcStruct>
+</Document>

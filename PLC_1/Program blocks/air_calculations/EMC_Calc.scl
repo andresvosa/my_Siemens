@@ -1,0 +1,39 @@
+﻿FUNCTION "EMC_Calc" : Real
+TITLE = Equilibrium moisture content
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : 'A.V. '
+VERSION : 0.1
+//Function fo calculating Equilibrium moisture content for wood. The Hailwood-Horrobin equation.
+   VAR_INPUT 
+      T : Real;   // Temperature [C]
+      Rh : Real;   // Relative humidity [%]
+      cnsts : Array[*, *] of Real;   // Constants for calculation
+   END_VAR
+
+   VAR_TEMP 
+      Tfh : Real;   // Temperature [Farenheit]
+      Rhf : Real;   // Relative humidity [% / 100.0] fractional
+      arguments : Array[0..3] of Real;   // Arguments for equation [W, k, k1, k2]
+      i : Int;   // row counter
+      max_rv_len : DInt;   // Max row index
+      max_col_len : DInt;   // Max column index
+   END_VAR
+
+
+BEGIN
+	(*
+	
+	*)
+	#Tfh := "LGF_CelsiusToFahrenheit"(#T);
+	#Rhf := #Rh / 100.0;
+	#max_rv_len := UPPER_BOUND(ARR := #cnsts, DIM := 1);
+	#max_col_len := UPPER_BOUND(ARR := #cnsts, DIM := 2);
+	FOR #i := 0 TO #max_rv_len DO
+	    // Calculating argument values for equation
+	    #arguments[#i] := "quad_fnc_value"(x := #Tfh, a := #cnsts[#i, 0], b := #cnsts[#i,1], c := #cnsts[#i,2]);
+	END_FOR;
+	// Calculating equation value
+	#EMC_Calc := (1800.0 / #arguments[0]) * (#arguments[1] * #Rhf / (1 - (#arguments[1] * #Rhf)) + (((#arguments[2]*#arguments[1]*#Rhf) + (2 * #arguments[2] * #arguments[3] * SQR(#arguments[1]) * SQR(#Rhf)))/(1 + (#arguments[2]*#arguments[1]*#Rhf) + (#arguments[2] * #arguments[3] * SQR(#arguments[1]) * SQR(#Rhf)))));
+	
+END_FUNCTION
+

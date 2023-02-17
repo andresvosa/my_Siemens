@@ -1,0 +1,55 @@
+﻿FUNCTION "TdRh_Tw" : Real
+TITLE = Calculate wet bulb temperature
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : 'A.V.'
+VERSION : 0.1
+//Function to calculate wet bulb temperature from dry bulb temperature & relative humidity.
+   VAR_INPUT 
+      Td : Real;   // Dry bulb temperature [C]
+      Rh : Real;   // Relative humidity [%]
+   END_VAR
+
+   VAR_TEMP 
+      Rhf : Real;   // Relative humidity [% / 100.0] fractional
+      Tw_iter : Real;   // Running wet bulb temperature for calculations
+      Rhc : Real;   // Calculated air relative  humidity [%]
+      Ed : Real;   // Saturation vapor pressure in the dry-bulb temperature
+      Ew : Real;   // Saturation vapor pressure in the wet-bulb temperature
+   END_VAR
+
+   VAR CONSTANT 
+      CALC_STEP : Real := 0.1;   // Calculation step size
+   END_VAR
+
+
+BEGIN
+	(*
+	First approach
+	Tw = T * arctan[0.151977 * (RH% + 8.313659)^(1/2)] + arctan(T + RH%) - arctan(RH% - 1.676331) + 0.00391838 *(RH%)^(3/2) * arctan(0.023101 * RH%) - 4.686035.
+	Second approach:
+	    1) Rhf = (Rh / 100.0%)
+	    2) e(d) = 6.112 * EXP[17.62 * Td/(243.12 + Td)]
+	    3) e(w) ≈ e(d) * √(Rhf)
+	    4) Tw ≈ (237.7 * Log[e(w)/6.108]) / (7.5 - Log[e(w) / 6.108])
+	    
+	*)
+	// First approach calculations
+	#TdRh_Tw := #Td * ATAN(0.151977 * (EXP(0.5 * LN(#Rh + 8.313659)))) + ATAN(#Td + #Rh) - ATAN(#Rh - 1.676331) + 0.00391838 * EXP(1.5 * LN(#Rh)) * ATAN(0.023101 * #Rh) - 4.686035;
+	// Second approach calculations
+	(* // This version doesn't seems to work
+	#Rhf := #Rh / 100.0;
+	#Ed := 6.112 * EXP(17.502 * #Td / (240.97 + #Td));
+	#Ew := #Ed * SQRT(#Rhf);
+	#TdRh_Tw := 237.7 * LN(#Ew / 6.108) / (7.5 - LN(#Ew / 6.108));
+	*)
+	(* 
+	#Tw_iter := #Td;
+	REPEAT
+	    // Iterative calculation of wet bulb temperature
+	    #Tw_iter := #Tw_iter - #CALC_STEP;
+	    #Rhc := "TdTw_Rh"(Td := #Td, Tw := #Tw_iter, P := "air_data".Pmean);
+	UNTIL #Rhc <= #Rh END_REPEAT;
+	#TdRh_Tw := #Tw_iter;
+	*)
+END_FUNCTION
+

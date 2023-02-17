@@ -1,0 +1,31 @@
+﻿FUNCTION "TdTw_Rh" : Real
+TITLE = Calculate relative humidity
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : 'A.V.'
+VERSION : 0.1
+//Calculate relative humidity from dry bulb temperature & wet bulb temperature
+   VAR_INPUT 
+      Td : Real;   // Dry bulb temperature [C]
+      Tw : Real;   // Wet bulb temperature  [C]
+      P : Real;   // Atmospheric pressure [hPa] (mbar)
+   END_VAR
+
+   VAR_TEMP 
+      A : Real;   // The measuring humidity coefficient
+      Ed : Real;   // Saturation vapor pressure in the dry-bulb temperature
+      Ew : Real;   // Saturation vapor pressure in the wet-bulb temperature
+   END_VAR
+
+
+BEGIN
+	(*
+	
+	*)
+	//Calculating argument values for equation
+	#A := 0.00066 * (1 + 0.00115 * #Tw);
+	#Ew := 6.112 * EXP(17.502 * #Tw / (240.97 + #Tw));
+	#Ed := 6.112 * EXP(17.502 * #Td / (240.97 + #Td));
+	#TdTw_Rh := (#Ew - (#A * #P * (#Td - #Tw))) / #Ed * 100.0;
+	
+END_FUNCTION
+

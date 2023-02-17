@@ -1,0 +1,78 @@
+﻿FUNCTION "mov_avg" : Int
+TITLE = Moving average
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : 'A.V.'
+VERSION : 0.1
+//Simple moving average for signals
+   VAR_INPUT 
+      i_vLastMeasured : Variant;   // Last measured value for filtering
+      i_uiWindowLength : UInt;   // Filter window length
+   END_VAR
+
+   VAR_IN_OUT 
+      iq_vFilteredValue : Variant;   // Filtered value
+   END_VAR
+
+   VAR_TEMP 
+      _rStorage : Real;   // Temporary real value for calculations
+      _lrStorage : LReal;   // Temporary long real value for calculations
+      _rLastMeasured : Real;   // Last measured value of real type
+      _lrLastMeasured : LReal;   // Last measured value of long real type
+   END_VAR
+
+
+BEGIN
+	#mov_avg := 1;
+	// Input and output values must be in same type
+	IF TypeOf(#i_vLastMeasured) <> TypeOf(#iq_vFilteredValue)  THEN
+	    #mov_avg := -1;
+	    RETURN;
+	END_IF;
+	
+	// In case of short window there are no filtering
+	IF #i_uiWindowLength < 2 THEN
+	    CASE TypeOf(#i_vLastMeasured) OF
+	        Real:
+	            VariantGet(SRC := #i_vLastMeasured,
+	                       DST => #_rStorage);
+	            VariantPut(SRC := #_rStorage,
+	                       DST := #iq_vFilteredValue);
+	        LReal:
+	            VariantGet(SRC := #i_vLastMeasured,
+	                       DST => #_lrStorage);
+	            VariantPut(SRC := #_lrStorage,
+	                       DST := #iq_vFilteredValue);
+	        ELSE
+	            #mov_avg := -1;
+	    END_CASE;
+	    #mov_avg := 0;
+	ELSE
+	    CASE TypeOf(#i_vLastMeasured) OF
+	        Real:  
+	            VariantGet(SRC := #iq_vFilteredValue,
+	                       DST => #_rStorage);
+	            #_rStorage := #_rStorage * UINT_TO_REAL(#i_uiWindowLength - 1);
+	            VariantGet(SRC:=#i_vLastMeasured,
+	                       DST=>#_rLastMeasured);
+	            #_rStorage := #_rStorage + #_rLastMeasured;
+	            #_rStorage := #_rStorage / UINT_TO_REAL(#i_uiWindowLength);
+	            VariantPut(SRC:= #_rStorage,
+	                       DST:=#iq_vFilteredValue);
+	        LReal: 
+	            VariantGet(SRC := #iq_vFilteredValue,
+	                       DST => #_lrStorage);
+	            #_lrStorage := #_lrStorage * UINT_TO_LREAL(#i_uiWindowLength - 1);
+	            VariantGet(SRC := #i_vLastMeasured,
+	                       DST => #_lrLastMeasured);
+	            #_lrStorage := #_lrStorage + #_lrLastMeasured;
+	            #_lrStorage := #_lrStorage / UINT_TO_LREAL(#i_uiWindowLength);
+	            VariantPut(SRC := #_lrStorage,
+	                       DST := #iq_vFilteredValue);;
+	        ELSE 
+	            #mov_avg := -1;;
+	    END_CASE;
+	    #mov_avg := 0;
+	END_IF;
+	
+END_FUNCTION
+

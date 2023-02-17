@@ -1,0 +1,22 @@
+﻿FUNCTION "quad_fnc_value" : Real
+TITLE = Quadratic function value
+{ S7_Optimized_Access := 'TRUE' }
+AUTHOR : 'A.V.'
+VERSION : 0.1
+//Quadraric function value calculation with argument x and constants a, b, c
+   VAR_INPUT 
+      x : Real;   // Argument
+      a : Real;   // Quadratic term constant
+      b : Real;   // Linear term constant
+      c : Real;   // Free constant
+   END_VAR
+
+
+BEGIN
+	(* 
+	
+	*)
+	#quad_fnc_value := (#a * SQR(#x)) + (#b * #x) + #c;
+	
+END_FUNCTION
+
